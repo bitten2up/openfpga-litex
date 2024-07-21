@@ -3,7 +3,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
     <vendor>litex</vendor>
     <name>SOC</name>
-    <description><![CDATA[Litex SoC 2023-12-02 16:49:17]]></description>
+    <description><![CDATA[Litex SoC 2024-07-21 15:39:06]]></description>
 
     <addressUnitBits>8</addressUnitBits>
     <width>32</width>
@@ -295,8 +295,202 @@ expected codes.]]></description>
             </addressBlock>
         </peripheral>
         <peripheral>
-            <name>APF_ID</name>
+            <name>APF_CART</name>
             <baseAddress>0xF0001000</baseAddress>
+            <groupName>APF_CART</groupName>
+            <registers>
+                <register>
+                    <name>USE_CART_UART</name>
+                    <addressOffset>0x0000</addressOffset>
+                    <resetValue>0x01</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>use_cart_uart</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK0_DIR</name>
+                    <addressOffset>0x0004</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank0_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK0</name>
+                    <addressOffset>0x0008</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank0</name>
+                            <msb>3</msb>
+                            <bitRange>[3:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK1_DIR</name>
+                    <addressOffset>0x000c</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank1_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK1</name>
+                    <addressOffset>0x0010</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank1</name>
+                            <msb>7</msb>
+                            <bitRange>[7:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK2_DIR</name>
+                    <addressOffset>0x0014</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank2_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK2</name>
+                    <addressOffset>0x0018</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank2</name>
+                            <msb>7</msb>
+                            <bitRange>[7:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK3_DIR</name>
+                    <addressOffset>0x001c</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank3_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_BANK3</name>
+                    <addressOffset>0x0020</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_bank3</name>
+                            <msb>7</msb>
+                            <bitRange>[7:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_PIN30_DIR</name>
+                    <addressOffset>0x0024</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_pin30_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_PIN30</name>
+                    <addressOffset>0x0028</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_pin30</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_PIN31_DIR</name>
+                    <addressOffset>0x002c</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_pin31_dir</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+                <register>
+                    <name>CART_PIN31</name>
+                    <addressOffset>0x0030</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_pin31</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
+            </registers>
+            <addressBlock>
+                <offset>0</offset>
+                <size>0x34</size>
+                <usage>registers</usage>
+            </addressBlock>
+        </peripheral>
+        <peripheral>
+            <name>APF_ID</name>
+            <baseAddress>0xF0001800</baseAddress>
             <groupName>APF_ID</groupName>
             <registers>
                 <register>
@@ -338,7 +532,7 @@ expected codes.]]></description>
         </peripheral>
         <peripheral>
             <name>APF_INPUT</name>
-            <baseAddress>0xF0001800</baseAddress>
+            <baseAddress>0xF0002000</baseAddress>
             <groupName>APF_INPUT</groupName>
             <registers>
                 <register>
@@ -534,7 +728,7 @@ analog on controllers with analog triggers. See docs.]]></description>
         </peripheral>
         <peripheral>
             <name>APF_INTERACT</name>
-            <baseAddress>0xF0002000</baseAddress>
+            <baseAddress>0xF0002800</baseAddress>
             <groupName>APF_INTERACT</groupName>
             <registers>
                 <register>
@@ -1026,7 +1220,7 @@ analog on controllers with analog triggers. See docs.]]></description>
         </peripheral>
         <peripheral>
             <name>APF_RTC</name>
-            <baseAddress>0xF0002800</baseAddress>
+            <baseAddress>0xF0003000</baseAddress>
             <groupName>APF_RTC</groupName>
             <registers>
                 <register>
@@ -1083,7 +1277,7 @@ analog on controllers with analog triggers. See docs.]]></description>
         </peripheral>
         <peripheral>
             <name>APF_VIDEO</name>
-            <baseAddress>0xF0003000</baseAddress>
+            <baseAddress>0xF0003800</baseAddress>
             <groupName>APF_VIDEO</groupName>
             <registers>
                 <register>
@@ -1127,7 +1321,7 @@ to occur at the start of vblank.]]></description>
         </peripheral>
         <peripheral>
             <name>CTRL</name>
-            <baseAddress>0xF0003800</baseAddress>
+            <baseAddress>0xF0004000</baseAddress>
             <groupName>CTRL</groupName>
             <registers>
                 <register>
@@ -1193,7 +1387,7 @@ to the Wishbone/CSR bus are working correctly. The initial reset value of
         </peripheral>
         <peripheral>
             <name>IDENTIFIER_MEM</name>
-            <baseAddress>0xF0004000</baseAddress>
+            <baseAddress>0xF0004800</baseAddress>
             <groupName>IDENTIFIER_MEM</groupName>
             <registers>
                 <register>
@@ -1220,7 +1414,7 @@ to the Wishbone/CSR bus are working correctly. The initial reset value of
         </peripheral>
         <peripheral>
             <name>SDRAM</name>
-            <baseAddress>0xF0004800</baseAddress>
+            <baseAddress>0xF0005000</baseAddress>
             <groupName>SDRAM</groupName>
             <registers>
                 <register>
@@ -1547,7 +1741,7 @@ to the Wishbone/CSR bus are working correctly. The initial reset value of
         </peripheral>
         <peripheral>
             <name>TIMER0</name>
-            <baseAddress>0xF0005000</baseAddress>
+            <baseAddress>0xF0005800</baseAddress>
             <groupName>TIMER0</groupName>
             <registers>
                 <register>
@@ -1739,7 +1933,7 @@ register to disable individual events.]]></description>
         </peripheral>
         <peripheral>
             <name>UART</name>
-            <baseAddress>0xF0005800</baseAddress>
+            <baseAddress>0xF0006000</baseAddress>
             <groupName>UART</groupName>
             <registers>
                 <register>
@@ -1901,7 +2095,7 @@ register to disable individual events.]]></description>
         </peripheral>
         <peripheral>
             <name>VIDEO_FRAMEBUFFER</name>
-            <baseAddress>0xF0006000</baseAddress>
+            <baseAddress>0xF0006800</baseAddress>
             <groupName>VIDEO_FRAMEBUFFER</groupName>
             <registers>
                 <register>
@@ -1997,7 +2191,7 @@ register to disable individual events.]]></description>
         </peripheral>
         <peripheral>
             <name>VIDEO_FRAMEBUFFER_VTG</name>
-            <baseAddress>0xF0006800</baseAddress>
+            <baseAddress>0xF0007000</baseAddress>
             <groupName>VIDEO_FRAMEBUFFER_VTG</groupName>
             <registers>
                 <register>

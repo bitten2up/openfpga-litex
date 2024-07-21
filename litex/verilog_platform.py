@@ -117,6 +117,28 @@ class Platform(AlteraPlatform):
                 Subsignal("command_result_code", Pins(3)),
             ),
 
+            ("apf_cart", 0,
+                Subsignal("use_cart_uart", Pins(1)),
+
+                Subsignal("cart_bank0", Pins(4)),
+                Subsignal("cart_bank0_dir", Pins(1)),
+
+                Subsignal("cart_bank1", Pins(8)),
+                Subsignal("cart_bank1_dir", Pins(1)),
+
+                Subsignal("cart_bank2", Pins(8)),
+                Subsignal("cart_bank2_dir", Pins(1)),
+
+                Subsignal("cart_bank3", Pins(8)),
+                Subsignal("cart_bank3_dir", Pins(1)),
+
+                Subsignal("cart_pin30", Pins(1)),
+                Subsignal("cart_pin30_dir", Pins(1)),
+
+                Subsignal("cart_pin31", Pins(1)),
+                Subsignal("cart_pin31_dir", Pins(1))
+            ),
+
             ("apf_id", 0,
                 Subsignal("chip_id", Pins(64)) 
             ),

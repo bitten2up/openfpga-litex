@@ -1,7 +1,9 @@
 from litex.build.altera.platform import AlteraPlatform
 from litex.gen.fhdl.module import LiteXModule
-from litex.soc.interconnect.csr import CSR, CSRField, CSRStatus, CSRStorage
+from litex.soc.interconnect.csr import CSR, _CSRBase, CSRField, CSRStatus, CSRStorage
+from migen.fhdl.specials import Tristate
 from migen.fhdl.structure import Case, If, Signal
+from migen.genlib.record import Record
 
 
 class APFAudio(LiteXModule):
@@ -127,6 +129,67 @@ class APFBridge(LiteXModule):
         ]
 
 
+class APFCart(LiteXModule):
+    def __init__(self, platform: AlteraPlatform):
+        cart_pins = platform.request("apf_cart")
+
+        self.use_cart_uart = CSRStorage(reset=1)
+
+        self.cart_bank0_dir = CSRStorage()
+        self.cart_bank0 = CSRCartGroup(
+            self, 4, cart_pins.cart_bank0, self.cart_bank0_dir.storage, "cart_bank0"
+        )
+
+        self.cart_bank1_dir = CSRStorage()
+        self.cart_bank1 = CSRCartGroup(
+            self, 8, cart_pins.cart_bank1, self.cart_bank1_dir.storage, "cart_bank1"
+        )
+
+        self.cart_bank2_dir = CSRStorage()
+        self.cart_bank2 = CSRCartGroup(
+            self, 8, cart_pins.cart_bank2, self.cart_bank2_dir.storage, "cart_bank2"
+        )
+
+        self.cart_bank3_dir = CSRStorage()
+        self.cart_bank3 = CSRCartGroup(
+            self, 8, cart_pins.cart_bank3, self.cart_bank3_dir.storage, "cart_bank3"
+        )
+
+        self.cart_pin30_dir = CSRStorage()
+        self.cart_pin30 = CSRCartGroup(
+            self, 1, cart_pins.cart_pin30, self.cart_pin30_dir.storage, "cart_pin30"
+        )
+
+        self.cart_pin31_dir = CSRStorage()
+        self.cart_pin31 = CSRCartGroup(
+            self, 1, cart_pins.cart_pin31, self.cart_pin31_dir.storage, "cart_pin31"
+        )
+
+        self.comb += [
+            cart_pins.use_cart_uart.eq(self.use_cart_uart.storage),
+            cart_pins.cart_bank0_dir.eq(self.cart_bank0_dir.storage),
+            cart_pins.cart_bank1_dir.eq(self.cart_bank1_dir.storage),
+            cart_pins.cart_bank2_dir.eq(self.cart_bank2_dir.storage),
+            cart_pins.cart_bank3_dir.eq(self.cart_bank3_dir.storage),
+            cart_pins.cart_pin30_dir.eq(self.cart_pin30_dir.storage),
+            cart_pins.cart_pin31_dir.eq(self.cart_pin31_dir.storage),
+        ]
+
+
+class CSRCartGroup(CSR):
+    def __init__(self, module, size: int, signal, dir, name=None, n=None):
+        CSR.__init__(self, size, name, n)
+
+        self.input = Signal(size)
+        self.storage = Signal(size)
+
+        # o is output from core, i is input to core
+        module.specials += Tristate(signal, o=self.storage, oe=dir, i=self.input)
+
+        module.sync += If(self.re, self.storage.eq(self.r))
+        module.comb += self.w.eq(self.input)
+
+
 class APFID(LiteXModule):
     def __init__(self, platform: AlteraPlatform):
         id_pins = platform.request("apf_id")
@@ -198,6 +261,7 @@ class APFInput(LiteXModule):
         self.comb += self.cont3_trig.status.eq(input_pins.cont3_trig)
         self.comb += self.cont4_trig.status.eq(input_pins.cont4_trig)
 
+
 class APFInteract(LiteXModule):
     def __init__(self, platform: AlteraPlatform):
         interact_pins = platform.request("apf_interact")
@@ -216,7 +280,9 @@ class APFInteract(LiteXModule):
             setattr(self, main_name, interact_csr)
 
             changed_csr = CSRStatus(1)
-            changed_csr.description = f"When 1, indicates the interact.json entry {i} has been updated."
+            changed_csr.description = (
+                f"When 1, indicates the interact.json entry {i} has been updated."
+            )
             changed_csr.name = changed_name
 
             setattr(self, changed_name, changed_csr)
@@ -225,15 +291,13 @@ class APFInteract(LiteXModule):
 
             write_case_dict[i] = [
                 interact_storage.eq(interact_pins.data),
-                changed_csr.status.eq(1)
+                changed_csr.status.eq(1),
             ]
 
-            read_case_dict[i] = [
-                interact_pins.q.eq(interact_storage)
-            ]
+            read_case_dict[i] = [interact_pins.q.eq(interact_storage)]
 
             self.comb += interact_csr.w.eq(interact_storage)
-        
+
             self.sync += [
                 # Write
                 If(interact_csr.re, interact_storage.eq(interact_csr.r)),
@@ -245,6 +309,7 @@ class APFInteract(LiteXModule):
             If(interact_pins.wr, Case(interact_pins.address, write_case_dict)),
             Case(interact_pins.address, read_case_dict),
         ]
+
 
 class APFRTC(LiteXModule):
     def __init__(self, platform: AlteraPlatform):
