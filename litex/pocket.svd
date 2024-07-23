@@ -3,7 +3,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
     <vendor>litex</vendor>
     <name>SOC</name>
-    <description><![CDATA[Litex SoC 2024-07-21 15:39:06]]></description>
+    <description><![CDATA[Litex SoC 2024-07-22 19:20:25]]></description>
 
     <addressUnitBits>8</addressUnitBits>
     <width>32</width>
@@ -481,10 +481,24 @@ expected codes.]]></description>
                         </field>
                     </fields>
                 </register>
+                <register>
+                    <name>CART_PIN30_PWROFF_RESET</name>
+                    <addressOffset>0x0034</addressOffset>
+                    <resetValue>0x00</resetValue>
+                    <size>32</size>
+                    <fields>
+                        <field>
+                            <name>cart_pin30_pwroff_reset</name>
+                            <msb>0</msb>
+                            <bitRange>[0:0]</bitRange>
+                            <lsb>0</lsb>
+                        </field>
+                    </fields>
+                </register>
             </registers>
             <addressBlock>
                 <offset>0</offset>
-                <size>0x34</size>
+                <size>0x38</size>
                 <usage>registers</usage>
             </addressBlock>
         </peripheral>

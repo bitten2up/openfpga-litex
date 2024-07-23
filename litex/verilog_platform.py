@@ -135,6 +135,8 @@ class Platform(AlteraPlatform):
                 Subsignal("cart_pin30", Pins(1)),
                 Subsignal("cart_pin30_dir", Pins(1)),
 
+                Subsignal("cart_pin30_pwroff_reset", Pins(1)),
+
                 Subsignal("cart_pin31", Pins(1)),
                 Subsignal("cart_pin31_dir", Pins(1))
             ),

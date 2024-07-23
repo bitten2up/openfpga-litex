@@ -165,6 +165,8 @@ class APFCart(LiteXModule):
             self, 1, cart_pins.cart_pin31, self.cart_pin31_dir.storage, "cart_pin31"
         )
 
+        self.cart_pin30_pwroff_reset = CSRStorage()
+
         self.comb += [
             cart_pins.use_cart_uart.eq(self.use_cart_uart.storage),
             cart_pins.cart_bank0_dir.eq(self.cart_bank0_dir.storage),
@@ -172,6 +174,7 @@ class APFCart(LiteXModule):
             cart_pins.cart_bank2_dir.eq(self.cart_bank2_dir.storage),
             cart_pins.cart_bank3_dir.eq(self.cart_bank3_dir.storage),
             cart_pins.cart_pin30_dir.eq(self.cart_pin30_dir.storage),
+            cart_pins.cart_pin30_pwroff_reset.eq(self.cart_pin30_pwroff_reset.storage),
             cart_pins.cart_pin31_dir.eq(self.cart_pin31_dir.storage),
         ]
 

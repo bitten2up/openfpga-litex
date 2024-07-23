@@ -233,11 +233,11 @@ module core_top (
 
   // not using the IR port, so turn off both the LED, and
   // disable the receive circuit to save power
-  assign port_ir_tx              = 0;
-  assign port_ir_rx_disable      = 1;
+  assign port_ir_tx           = 0;
+  assign port_ir_rx_disable   = 1;
 
   // bridge endianness
-  assign bridge_endian_little    = 0;
+  assign bridge_endian_little = 0;
 
   // cart is unused, so set all level translators accordingly
   // directions are 0:IN, 1:OUT
@@ -251,44 +251,44 @@ module core_top (
   // assign cart_tran_bank0_dir     = 1'b1;
   // assign cart_tran_pin30         = 1'b0;  // reset or cs2, we let the hw control it by itself
   // assign cart_tran_pin30_dir     = 1'bz;
-  assign cart_pin30_pwroff_reset = 1'b0;  // hardware can control this
+  // assign cart_pin30_pwroff_reset = 1'b0;  // hardware can control this
   // assign cart_tran_pin31         = 1'bz;  // input
   // assign cart_tran_pin31_dir     = 1'b0;  // input
 
   // link port is input only
-  assign port_tran_so            = 1'bz;
-  assign port_tran_so_dir        = 1'b0;  // SO is output only
-  assign port_tran_si            = 1'bz;
-  assign port_tran_si_dir        = 1'b0;  // SI is input only
-  assign port_tran_sck           = 1'bz;
-  assign port_tran_sck_dir       = 1'b0;  // clock direction can change
-  assign port_tran_sd            = 1'bz;
-  assign port_tran_sd_dir        = 1'b0;  // SD is input and not used
+  assign port_tran_so         = 1'bz;
+  assign port_tran_so_dir     = 1'b0;  // SO is output only
+  assign port_tran_si         = 1'bz;
+  assign port_tran_si_dir     = 1'b0;  // SI is input only
+  assign port_tran_sck        = 1'bz;
+  assign port_tran_sck_dir    = 1'b0;  // clock direction can change
+  assign port_tran_sd         = 1'bz;
+  assign port_tran_sd_dir     = 1'b0;  // SD is input and not used
 
   // tie off the rest of the pins we are not using
-  assign cram0_a                 = 'h0;
-  assign cram0_dq                = {16{1'bZ}};
-  assign cram0_clk               = 0;
-  assign cram0_adv_n             = 1;
-  assign cram0_cre               = 0;
-  assign cram0_ce0_n             = 1;
-  assign cram0_ce1_n             = 1;
-  assign cram0_oe_n              = 1;
-  assign cram0_we_n              = 1;
-  assign cram0_ub_n              = 1;
-  assign cram0_lb_n              = 1;
+  assign cram0_a              = 'h0;
+  assign cram0_dq             = {16{1'bZ}};
+  assign cram0_clk            = 0;
+  assign cram0_adv_n          = 1;
+  assign cram0_cre            = 0;
+  assign cram0_ce0_n          = 1;
+  assign cram0_ce1_n          = 1;
+  assign cram0_oe_n           = 1;
+  assign cram0_we_n           = 1;
+  assign cram0_ub_n           = 1;
+  assign cram0_lb_n           = 1;
 
-  assign cram1_a                 = 'h0;
-  assign cram1_dq                = {16{1'bZ}};
-  assign cram1_clk               = 0;
-  assign cram1_adv_n             = 1;
-  assign cram1_cre               = 0;
-  assign cram1_ce0_n             = 1;
-  assign cram1_ce1_n             = 1;
-  assign cram1_oe_n              = 1;
-  assign cram1_we_n              = 1;
-  assign cram1_ub_n              = 1;
-  assign cram1_lb_n              = 1;
+  assign cram1_a              = 'h0;
+  assign cram1_dq             = {16{1'bZ}};
+  assign cram1_clk            = 0;
+  assign cram1_adv_n          = 1;
+  assign cram1_cre            = 0;
+  assign cram1_ce0_n          = 1;
+  assign cram1_ce1_n          = 1;
+  assign cram1_oe_n           = 1;
+  assign cram1_we_n           = 1;
+  assign cram1_ub_n           = 1;
+  assign cram1_lb_n           = 1;
 
   // assign dram_a                  = 'h0;
   // assign dram_ba                 = 'h0;
@@ -300,17 +300,17 @@ module core_top (
   // assign dram_cas_n              = 'h1;
   // assign dram_we_n               = 'h1;
 
-  assign sram_a                  = 'h0;
-  assign sram_dq                 = {16{1'bZ}};
-  assign sram_oe_n               = 1;
-  assign sram_we_n               = 1;
-  assign sram_ub_n               = 1;
-  assign sram_lb_n               = 1;
+  assign sram_a               = 'h0;
+  assign sram_dq              = {16{1'bZ}};
+  assign sram_oe_n            = 1;
+  assign sram_we_n            = 1;
+  assign sram_ub_n            = 1;
+  assign sram_lb_n            = 1;
 
-  assign dbg_tx                  = 1'bZ;
-  assign user1                   = 1'bZ;
-  assign aux_scl                 = 1'bZ;
-  assign vpll_feed               = 1'bZ;
+  assign dbg_tx               = 1'bZ;
+  assign user1                = 1'bZ;
+  assign aux_scl              = 1'bZ;
+  assign vpll_feed            = 1'bZ;
 
   wire [31:0] apf_wishbone_bridge_rd_data;
 
@@ -976,6 +976,7 @@ module core_top (
       .apf_cart_cart_bank3_dir(litex_cart_tran_bank3_dir),
       .apf_cart_cart_pin30(cart_tran_pin30),
       .apf_cart_cart_pin30_dir(cart_tran_pin30_dir),
+      .apf_cart_cart_pin30_pwroff_reset(cart_pin30_pwroff_reset),
       .apf_cart_cart_pin31(litex_cart_tran_pin31),
       .apf_cart_cart_pin31_dir(litex_cart_tran_pin31_dir),
       .apf_cart_use_cart_uart(use_cart_uart),
