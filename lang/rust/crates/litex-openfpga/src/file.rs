@@ -1,3 +1,5 @@
+use core::mem::ManuallyDrop;
+
 use alloc::string::String;
 use alloc::vec;
 use litex_pac as pac;
@@ -125,11 +127,19 @@ impl File {
     /// Files can only be read or created in paths of the form `/[Assets | Saves]/[registered platform ID]/[common | registered core name]/*`.
     ///
     pub fn request_openfile(
+        path_storage: &mut [u8],
         path: &str,
         mode: OpenFileMode,
         bridge_slot_id: usize,
     ) -> OpenFileResult {
         let peripherals = unsafe { pac::Peripherals::steal() };
+
+        if path_storage.len() != 264 {
+            panic!(
+                "Invalid openfile path_storage length {}",
+                path_storage.len()
+            );
+        }
 
         let expected_size = match mode {
             OpenFileMode::ResizeOnly { expected_size }
@@ -137,13 +147,13 @@ impl File {
             _ => 0,
         };
 
-        let mut path_storage = vec![0; 264];
-
         unsafe {
             let bytes = path.as_bytes();
             path_storage[0..bytes.len()].copy_from_slice(bytes);
 
-            // Space is already filled with 0s from the Vec macro
+            for i in bytes.len()..256 {
+                path_storage[i] = 0;
+            }
 
             // Big endian
             path_storage[0x100] = 0;
@@ -180,6 +190,9 @@ impl File {
             .write(|w| unsafe { w.bits(1) });
 
         File::block_op_complete();
+
+        // Only drop our struct storage once the operation is complete
+        // unsafe { ManuallyDrop::drop(&mut path_storage) };
 
         let result = peripherals.APF_BRIDGE.command_result_code.read().bits();
 
