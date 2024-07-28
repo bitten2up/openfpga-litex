@@ -3,11 +3,9 @@ use core::time::Duration;
 use litex_pac::constants::CONFIG_CLOCK_FREQUENCY;
 use num_traits::float::Float;
 
-const CLOCK_CYCLE_PERIOD_NANOS: f64 = 1_000_000_000.0 / (CONFIG_CLOCK_FREQUENCY as f64);
+use crate::util::combine_u32;
 
-fn combine_u32(low: u32, high: u32) -> u64 {
-    ((high as u64) << 32) | (low as u64)
-}
+const CLOCK_CYCLE_PERIOD_NANOS: f64 = 1_000_000_000.0 / (CONFIG_CLOCK_FREQUENCY as f64);
 
 ///
 /// Gets the number of nanoseconds that have occurred since core start

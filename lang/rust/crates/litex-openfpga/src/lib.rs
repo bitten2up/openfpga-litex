@@ -9,6 +9,7 @@ pub mod file;
 pub mod slint_platform;
 pub mod time;
 pub mod uart_printer;
+mod util;
 
 pub use file::*;
 pub use time::*;

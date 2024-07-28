@@ -1,21 +1,30 @@
+use core::slice::from_raw_parts_mut;
+
 use alloc::rc::Rc;
-use num_traits::float::Float;
-use slint::platform::{software_renderer::MinimalSoftwareWindow, Platform};
+use slint::platform::{
+    software_renderer::{MinimalSoftwareWindow, RepaintBufferType, Rgb565Pixel},
+    Platform,
+};
+
+use crate::duration_since_launch;
 
 pub struct SlintPlatform {
     pub window: Rc<MinimalSoftwareWindow>,
-    clock_cycle_period_nanos: f64,
-}
-
-fn combine_u32(low: u32, high: u32) -> u64 {
-    ((high as u64) << 32) | (low as u64)
 }
 
 impl SlintPlatform {
-    pub fn new(window: Rc<MinimalSoftwareWindow>, clock_speed_hz: u32) -> Self {
-        SlintPlatform {
-            window,
-            clock_cycle_period_nanos: 1_000_000_000.0 / (clock_speed_hz as f64),
+    pub fn new(width: u32, height: u32) -> Self {
+        let window = MinimalSoftwareWindow::new(RepaintBufferType::SwappedBuffers);
+
+        window.set_size(slint::PhysicalSize::new(width, height));
+
+        SlintPlatform { window }
+    }
+
+    pub fn renderer(&self) -> SlintRenderer {
+        SlintRenderer {
+            window: self.window.clone(),
+            render_buffer_1: false,
         }
     }
 }
@@ -30,24 +39,61 @@ impl Platform for SlintPlatform {
     }
 
     fn duration_since_start(&self) -> core::time::Duration {
-        let peripherals = unsafe { litex_pac::Peripherals::steal() };
-
-        unsafe {
-            // Grab cycle count
-            peripherals.TIMER0.uptime_latch.write(|w| w.bits(1));
-        };
-
-        let low_bits = peripherals.TIMER0.uptime_cycles0.read().bits();
-        let high_bits = peripherals.TIMER0.uptime_cycles1.read().bits();
-        let uptime_cycles = combine_u32(low_bits, high_bits);
-
-        let duration = (self.clock_cycle_period_nanos * (uptime_cycles as f64)).floor() as u64;
-
-        core::time::Duration::from_nanos(duration)
+        duration_since_launch()
     }
 
     // optional: You can put the event loop there, or in the main function, see later
     fn run_event_loop(&self) -> Result<(), slint::PlatformError> {
         todo!();
+    }
+}
+
+pub struct SlintRenderer {
+    window: Rc<MinimalSoftwareWindow>,
+    render_buffer_1: bool,
+}
+
+impl SlintRenderer {
+    pub fn render_frame_if_needed(
+        &mut self,
+        framebuffer0_address: *mut Rgb565Pixel,
+        framebuffer1_address: *mut Rgb565Pixel,
+    ) {
+        let peripherals = unsafe { litex_pac::Peripherals::steal() };
+
+        let size = self.window.size();
+
+        let framebuffer = unsafe {
+            from_raw_parts_mut(framebuffer0_address, (size.width * size.height) as usize)
+        };
+        let framebuffer2 = unsafe {
+            from_raw_parts_mut(framebuffer1_address, (size.width * size.height) as usize)
+        };
+
+        self.window.draw_if_needed(|renderer| {
+            // Draw to opposite buffer
+            renderer.render(
+                if self.render_buffer_1 {
+                    framebuffer
+                } else {
+                    framebuffer2
+                },
+                size.width as usize,
+            );
+
+            // Wait for vblank
+            while !peripherals.APF_VIDEO.video.read().vblank_triggered().bit() {}
+
+            self.render_buffer_1 = !self.render_buffer_1;
+
+            // Swap buffers
+            peripherals.VIDEO_FRAMEBUFFER.dma_base.write(|w| unsafe {
+                w.bits(if self.render_buffer_1 {
+                    framebuffer1_address
+                } else {
+                    framebuffer0_address
+                } as u32)
+            });
+        });
     }
 }

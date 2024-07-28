@@ -1,5 +1,5 @@
+use alloc::string::String;
 use alloc::vec;
-use alloc::{string::String, vec::Vec};
 use litex_pac as pac;
 
 pub struct File;
