@@ -132,6 +132,23 @@ impl File {
         mode: OpenFileMode,
         bridge_slot_id: usize,
     ) -> OpenFileResult {
+        File::request_openfile_nonblocking(path_storage, path, mode, bridge_slot_id);
+        File::request_openfile_result()
+    }
+
+    ///
+    /// Opens a file at the provided path, optionally creating a file at that path if it doesn't exist.
+    ///
+    /// Non-blocking. Call `request_openfile_result()` to get the result code.
+    ///
+    /// Files can only be read or created in paths of the form `/[Assets | Saves]/[registered platform ID]/[common | registered core name]/*`.
+    ///
+    pub fn request_openfile_nonblocking(
+        path_storage: &mut [u8],
+        path: &str,
+        mode: OpenFileMode,
+        bridge_slot_id: usize,
+    ) {
         let peripherals = unsafe { pac::Peripherals::steal() };
 
         if path_storage.len() != 264 {
@@ -188,11 +205,15 @@ impl File {
             .APF_BRIDGE
             .request_openfile
             .write(|w| unsafe { w.bits(1) });
+    }
+
+    ///
+    /// Returns the enum result code of an open file operation. If there is an ongoing file operation, will wait for it to complete.
+    ///
+    pub fn request_openfile_result() -> OpenFileResult {
+        let peripherals = unsafe { pac::Peripherals::steal() };
 
         File::block_op_complete();
-
-        // Only drop our struct storage once the operation is complete
-        // unsafe { ManuallyDrop::drop(&mut path_storage) };
 
         let result = peripherals.APF_BRIDGE.command_result_code.read().bits();
 
