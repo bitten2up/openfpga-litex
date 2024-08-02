@@ -917,7 +917,7 @@ module core_top (
 
   wire [31:0] ram_data_address;
   reg [31:0] latched_ram_data_address = 0;
-  wire [25:0] current_address;
+  wire [25:0] current_data_offset;
 
   wire [31:0] audio_bus_out;
   wire audio_bus_wr;
@@ -961,7 +961,7 @@ module core_top (
       .apf_bridge_file_size(active_file_size_s),
       .apf_bridge_file_size_wr(apf_bridge_file_size_wr),
       .apf_bridge_new_file_size_data(apf_bridge_new_file_size_data),
-      .apf_bridge_current_address(current_address),
+      .apf_bridge_current_address(current_data_offset),
       // Pulse complete on rising edge of done
       .apf_bridge_complete_trigger(target_dataslot_done_s && ~prev_target_dataslot_done_s),
       .apf_bridge_command_result_code(target_dataslot_err),
@@ -1094,7 +1094,7 @@ module core_top (
       // Write to start of SDRAM when uploading data
       .ram_data_address(latched_ram_data_address),
 
-      .current_address(current_address),
+      .current_data_offset(current_data_offset),
 
       .addr(apf_master_addr),
       .bte(apf_master_bte),

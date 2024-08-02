@@ -11,7 +11,7 @@ module apf_wishbone_master (
 
     input wire [31:0] ram_data_address,
 
-    output wire [26:0] current_address,
+    output reg [25:0] current_data_offset,
 
     output wire [29:0] addr,
     // Wishbone registered feedback flags
@@ -36,11 +36,8 @@ module apf_wishbone_master (
 
   wire [25:0] write_addr;
 
-  assign current_address = write_addr;
-
-  // TODO: Add read address
-  // assign addr = we ? {6'h0, write_addr} + ram_data_address[31:2] : 30'h0;
-  assign addr = state == READ ? {4'h0, bridge_addr_s} + ram_data_address[31:2] : {6'h0, write_addr} + ram_data_address[31:2];
+  wire [25:0] offset_addr = state == READ ? bridge_addr_s : write_addr;
+  assign addr = {4'h0, offset_addr} + ram_data_address[31:2];
 
   ////////////////////////////////////////////////////////////////////////////////////////
   // FIFO
@@ -209,8 +206,10 @@ module apf_wishbone_master (
         if (ack) begin
           state <= NONE;
 
-          cyc   <= 0;
-          stb   <= 0;
+          current_data_offset <= offset_addr;
+
+          cyc <= 0;
+          stb <= 0;
         end
       end
       READ: begin
@@ -222,8 +221,10 @@ module apf_wishbone_master (
         if (ack) begin
           state <= NONE;
 
-          cyc   <= 0;
-          stb   <= 0;
+          current_data_offset <= offset_addr;
+
+          cyc <= 0;
+          stb <= 0;
         end
       end
     endcase
