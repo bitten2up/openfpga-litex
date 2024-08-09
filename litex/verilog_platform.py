@@ -120,24 +120,30 @@ class Platform(AlteraPlatform):
             ("apf_cart", 0,
                 Subsignal("use_cart_uart", Pins(1)),
 
-                Subsignal("cart_bank0", Pins(4)),
+                Subsignal("cart_bank0_in", Pins(4)),
+                Subsignal("cart_bank0_out", Pins(4)),
                 Subsignal("cart_bank0_dir", Pins(1)),
 
-                Subsignal("cart_bank1", Pins(8)),
+                Subsignal("cart_bank1_in", Pins(8)),
+                Subsignal("cart_bank1_out", Pins(8)),
                 Subsignal("cart_bank1_dir", Pins(1)),
 
-                Subsignal("cart_bank2", Pins(8)),
+                Subsignal("cart_bank2_in", Pins(8)),
+                Subsignal("cart_bank2_out", Pins(8)),
                 Subsignal("cart_bank2_dir", Pins(1)),
 
-                Subsignal("cart_bank3", Pins(8)),
+                Subsignal("cart_bank3_in", Pins(8)),
+                Subsignal("cart_bank3_out", Pins(8)),
                 Subsignal("cart_bank3_dir", Pins(1)),
 
-                Subsignal("cart_pin30", Pins(1)),
+                Subsignal("cart_pin30_in", Pins(1)),
+                Subsignal("cart_pin30_out", Pins(1)),
                 Subsignal("cart_pin30_dir", Pins(1)),
 
                 Subsignal("cart_pin30_pwroff_reset", Pins(1)),
 
-                Subsignal("cart_pin31", Pins(1)),
+                Subsignal("cart_pin31_in", Pins(1)),
+                Subsignal("cart_pin31_out", Pins(1)),
                 Subsignal("cart_pin31_dir", Pins(1))
             ),
 

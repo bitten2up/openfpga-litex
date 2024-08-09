@@ -137,32 +137,32 @@ class APFCart(LiteXModule):
 
         self.cart_bank0_dir = CSRStorage()
         self.cart_bank0 = CSRCartGroup(
-            self, 4, cart_pins.cart_bank0, self.cart_bank0_dir.storage, "cart_bank0"
+            self, 4, cart_pins.cart_bank0_in, cart_pins.cart_bank0_out, "cart_bank0"
         )
 
         self.cart_bank1_dir = CSRStorage()
         self.cart_bank1 = CSRCartGroup(
-            self, 8, cart_pins.cart_bank1, self.cart_bank1_dir.storage, "cart_bank1"
+            self, 8, cart_pins.cart_bank1_in, cart_pins.cart_bank1_out, "cart_bank1"
         )
 
         self.cart_bank2_dir = CSRStorage()
         self.cart_bank2 = CSRCartGroup(
-            self, 8, cart_pins.cart_bank2, self.cart_bank2_dir.storage, "cart_bank2"
+            self, 8, cart_pins.cart_bank2_in, cart_pins.cart_bank2_out, "cart_bank2"
         )
 
         self.cart_bank3_dir = CSRStorage()
         self.cart_bank3 = CSRCartGroup(
-            self, 8, cart_pins.cart_bank3, self.cart_bank3_dir.storage, "cart_bank3"
+            self, 8, cart_pins.cart_bank3_in, cart_pins.cart_bank3_out, "cart_bank3"
         )
 
         self.cart_pin30_dir = CSRStorage()
         self.cart_pin30 = CSRCartGroup(
-            self, 1, cart_pins.cart_pin30, self.cart_pin30_dir.storage, "cart_pin30"
+            self, 1, cart_pins.cart_pin30_in, cart_pins.cart_pin30_out, "cart_pin30"
         )
 
         self.cart_pin31_dir = CSRStorage()
         self.cart_pin31 = CSRCartGroup(
-            self, 1, cart_pins.cart_pin31, self.cart_pin31_dir.storage, "cart_pin31"
+            self, 1, cart_pins.cart_pin31_in, cart_pins.cart_pin31_out, "cart_pin31"
         )
 
         self.cart_pin30_pwroff_reset = CSRStorage()
@@ -180,17 +180,16 @@ class APFCart(LiteXModule):
 
 
 class CSRCartGroup(CSR):
-    def __init__(self, module, size: int, signal, dir, name=None, n=None):
+    def __init__(self, module, size: int, in_signal, out_signal, name=None, n=None):
         CSR.__init__(self, size, name, n)
 
-        self.input = Signal(size)
         self.storage = Signal(size)
 
-        # o is output from core, i is input to core
-        module.specials += Tristate(signal, o=self.storage, oe=dir, i=self.input)
-
         module.sync += If(self.re, self.storage.eq(self.r))
-        module.comb += self.w.eq(self.input)
+        module.comb += [
+            self.w.eq(in_signal),
+            out_signal.eq(self.storage),
+        ]
 
 
 class APFID(LiteXModule):

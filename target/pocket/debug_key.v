@@ -34,11 +34,11 @@ module debug_key (
     input wire clk,
 
     output wire       cart_tran_bank0_dir,
-    inout  wire [7:4] cart_tran_bank0,
+    output wire [7:4] cart_tran_bank0_out,
     output wire       cart_tran_bank3_dir,
-    inout  wire [7:0] cart_tran_bank3,
+    input  wire [7:0] cart_tran_bank3_in,
     output wire       cart_tran_pin31_dir,
-    inout  wire       cart_tran_pin31,
+    input  wire       cart_tran_pin31_in,
     input  wire       led,
     output wire       button,
     input  wire       uart_tx,
@@ -47,24 +47,24 @@ module debug_key (
 
   // Enable bus output.
   // Note: UART uses this bank.
-  assign cart_tran_bank0_dir = 1'b1;
+  assign cart_tran_bank0_dir    = 1'b1;
 
   // Enable bus input.
-  assign cart_tran_bank3_dir = 1'b0;
-  assign cart_tran_pin31_dir = 1'b0;
+  assign cart_tran_bank3_dir    = 1'b0;
+  assign cart_tran_pin31_dir    = 1'b0;
 
   // Pin 4 is LED.
-  assign cart_tran_bank0[5]  = led;
+  assign cart_tran_bank0_out[5] = led;
 
   // Pin 6 is button, we invert since button is always high.
-  assign button              = ~cart_tran_bank3[0];
+  assign button                 = ~cart_tran_bank3_in[0];
 
   // Pin 3 is UART output
-  assign cart_tran_bank0[6]  = uart_tx;
+  assign cart_tran_bank0_out[6] = uart_tx;
 
   // Pin 31 is UART input
   synch_3 rx_synch (
-      cart_tran_pin31,
+      cart_tran_pin31_in,
       uart_rx,
       clk
   );

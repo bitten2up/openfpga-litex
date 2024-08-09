@@ -674,24 +674,40 @@ module core_top (
 
   wire use_cart_uart;
 
-  assign cart_tran_bank0 = use_cart_uart ? uart_cart_tran_bank0 : litex_cart_tran_bank0;
   assign cart_tran_bank0_dir = use_cart_uart ? uart_cart_tran_bank0_dir : litex_cart_tran_bank0_dir;
 
-  assign cart_tran_bank3 = use_cart_uart ? uart_cart_tran_bank3 : litex_cart_tran_bank3;
+  // assign cart_tran_bank3 = use_cart_uart ? uart_cart_tran_bank3 : litex_cart_tran_bank3;
   assign cart_tran_bank3_dir = use_cart_uart ? uart_cart_tran_bank3_dir : litex_cart_tran_bank3_dir;
 
-  assign cart_tran_pin31 = use_cart_uart ? uart_cart_tran_pin31 : litex_cart_tran_pin31;
+  // assign cart_tran_pin31 = use_cart_uart ? uart_cart_tran_pin31 : litex_cart_tran_pin31;
   assign cart_tran_pin31_dir = use_cart_uart ? uart_cart_tran_pin31_dir : litex_cart_tran_pin31_dir;
 
+  assign cart_tran_bank1 = cart_tran_bank1_dir ? litex_cart_tran_bank1 : 8'hZZ;
+  assign cart_tran_bank2 = cart_tran_bank2_dir ? litex_cart_tran_bank2 : 8'hZZ;
+  assign cart_tran_bank3 = cart_tran_bank3_dir ? litex_cart_tran_bank3 : 8'hZZ;
+
+  assign cart_tran_pin30 = cart_tran_pin30_dir ? litex_cart_tran_pin30 : 1'bZ;
+  assign cart_tran_pin31 = cart_tran_pin31_dir ? litex_cart_tran_pin31 : 1'bZ;
+
+  always_comb begin
+    cart_tran_bank0 = 8'hZZ;
+
+
+    if (cart_tran_bank0_dir) begin
+      cart_tran_bank0 = use_cart_uart ? uart_cart_tran_bank0 : litex_cart_tran_bank0;
+    end
+  end
+
   wire [7:4] uart_cart_tran_bank0;
-  wire [7:0] uart_cart_tran_bank3;
-  wire uart_cart_tran_pin31;
   wire uart_cart_tran_bank0_dir;
   wire uart_cart_tran_bank3_dir;
   wire uart_cart_tran_pin31_dir;
 
   wire [7:4] litex_cart_tran_bank0;
+  wire [7:0] litex_cart_tran_bank1;
+  wire [7:0] litex_cart_tran_bank2;
   wire [7:0] litex_cart_tran_bank3;
+  wire litex_cart_tran_pin30;
   wire litex_cart_tran_pin31;
   wire litex_cart_tran_bank0_dir;
   wire litex_cart_tran_bank3_dir;
@@ -701,13 +717,13 @@ module core_top (
       .clk(clk_sys_57_12),
 
       .cart_tran_bank0_dir(uart_cart_tran_bank0_dir),
-      .cart_tran_bank0(uart_cart_tran_bank0),
+      .cart_tran_bank0_out(uart_cart_tran_bank0),
 
       .cart_tran_bank3_dir(uart_cart_tran_bank3_dir),
-      .cart_tran_bank3(uart_cart_tran_bank3),
+      .cart_tran_bank3_in (cart_tran_bank3),
 
       .cart_tran_pin31_dir(uart_cart_tran_pin31_dir),
-      .cart_tran_pin31(uart_cart_tran_pin31),
+      .cart_tran_pin31_in (cart_tran_pin31),
 
       // IO
       .led(reload_rom_active),
@@ -966,18 +982,24 @@ module core_top (
       .apf_bridge_complete_trigger(target_dataslot_done_s && ~prev_target_dataslot_done_s),
       .apf_bridge_command_result_code(target_dataslot_err),
 
-      .apf_cart_cart_bank0(litex_cart_tran_bank0),
+      .apf_cart_cart_bank0_in(cart_tran_bank0),
+      .apf_cart_cart_bank0_out(litex_cart_tran_bank0),
       .apf_cart_cart_bank0_dir(litex_cart_tran_bank0_dir),
-      .apf_cart_cart_bank1(cart_tran_bank1),
+      .apf_cart_cart_bank1_in(cart_tran_bank1),
+      .apf_cart_cart_bank1_out(litex_cart_tran_bank1),
       .apf_cart_cart_bank1_dir(cart_tran_bank1_dir),
-      .apf_cart_cart_bank2(cart_tran_bank2),
+      .apf_cart_cart_bank2_in(cart_tran_bank2),
+      .apf_cart_cart_bank2_out(litex_cart_tran_bank2),
       .apf_cart_cart_bank2_dir(cart_tran_bank2_dir),
-      .apf_cart_cart_bank3(litex_cart_tran_bank3),
+      .apf_cart_cart_bank3_in(cart_tran_bank3),
+      .apf_cart_cart_bank3_out(litex_cart_tran_bank3),
       .apf_cart_cart_bank3_dir(litex_cart_tran_bank3_dir),
-      .apf_cart_cart_pin30(cart_tran_pin30),
+      .apf_cart_cart_pin30_in(cart_tran_pin30),
+      .apf_cart_cart_pin30_out(litex_cart_tran_pin30),
       .apf_cart_cart_pin30_dir(cart_tran_pin30_dir),
       .apf_cart_cart_pin30_pwroff_reset(cart_pin30_pwroff_reset),
-      .apf_cart_cart_pin31(litex_cart_tran_pin31),
+      .apf_cart_cart_pin31_in(cart_tran_pin31),
+      .apf_cart_cart_pin31_out(litex_cart_tran_pin31),
       .apf_cart_cart_pin31_dir(litex_cart_tran_pin31_dir),
       .apf_cart_use_cart_uart(use_cart_uart),
 
