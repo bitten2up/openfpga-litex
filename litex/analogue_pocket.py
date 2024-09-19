@@ -11,6 +11,7 @@
 
 # Set up the import paths for the LiteX packages
 import vendor
+import argparse
 from csr import APFID, APFRTC, APFAudio, APFBridge, APFInput, APFInteract, APFVideo
 from litex.soc.cores.uart import UART
 from replaced_components import (
@@ -30,6 +31,7 @@ from litex.gen import *
 import verilog_platform as analogue_pocket
 
 from litex.soc.integration.soc_core import *
+from litex.soc.cores.cpu.vexriscv_smp import VexRiscvSMP
 from litex.soc.integration.builder import *
 
 from litex.build.io import DDROutput
@@ -78,8 +80,9 @@ class _CRG(LiteXModule):
 
 
 class BaseSoC(SoCCore):
-    def __init__(self, sys_clk_freq, **kwargs):
+    def __init__(self, **kwargs):
         platform = analogue_pocket.Platform()
+        sys_clk_freq=CLOCK_SPEED
 
         # CRG --------------------------------------------------------------------------------------
         self.crg = _CRG(platform)
@@ -93,6 +96,8 @@ class BaseSoC(SoCCore):
         self.add_constant("DEPLOYMENT_TARGET", "pocket")
 
         # Allow booting from the first address in SDRAM
+        #self.add_constant("ROM_COPY_ADDRESS", 0x40000000)
+        self.add_constant("ROM", 0x00000000)
         self.add_constant("ROM_BOOT_ADDRESS", 0x40000000)
         # self.add_constant("SDRAM_TEST_DISABLE", 1)
 
@@ -242,32 +247,45 @@ def main():
     # Match up with Rust compiler target with FPU and RVC
     sys.argv.extend(
         [
-            "--cpu-type=vexriscv_smp",
+            #"--cpu-type=vexriscv_smp",
             "--with-fpu",
             "--with-rvc",
             # UART is manually added
-            "--no-uart",
-            "--timer-uptime",
+            #"--no-uart",
+            #"--timer-uptime",
         ]
     )
 
-    parser = LiteXArgumentParser(
-        platform=analogue_pocket.Platform, description="LiteX SoC on Analog Pocket."
-    )
-    parser.add_target_argument(
-        "--sys-clk-freq",
-        default=CLOCK_SPEED,
-        type=float,
-        help="System clock frequency.",
-    )
+    description = "Linux on LiteX-VexRiscv analogue_pocket\n\n"
+    parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("--build",          action="store_true",         help="Build bitstream.")
+    parser.add_argument("--load",          action="store_true",         help="Load bitstream.")
+    VexRiscvSMP.args_fill(parser)
     args = parser.parse_args()
 
-    soc_args = parser.soc_argdict
+    soc_kwargs = {
+        "with_mister_sdram" : True, # Add MiSTer SDRAM extension.
+        "l2_size"           : 2048, # Use Wishbone and L2 for memory accesses.
+        "integrated_rom_size" : 0x20000,
+        "integrated_sram_size": 0x20000, # Power of 2 so Quartus infers it properly.
+        "cpu_type"          : "vexriscv_smp",
+        "cpu_variant"       : "linux",
+    }
 
-    soc = BaseSoC(sys_clk_freq=args.sys_clk_freq, **soc_args)
-    builder_args = parser.builder_argdict
-    builder_args["csr_svd"] = "pocket.svd"
-    builder = Builder(soc, **builder_args)
+    VexRiscvSMP.args_read(args)
+
+    soc = BaseSoC(**soc_kwargs)
+    #builder_args = parser.builder_argdict
+    builder   = Builder(soc,
+            output_dir   = os.path.join("build", "litex"),
+            bios_console = "lite",
+            csr_svd      = os.path.join("./", "pocket.svd"),
+            csr_json     = os.path.join("build", "csr.json"),
+            csr_csv      = os.path.join("build", "csr.csv")
+    )
+    #builder_args["csr_svd"] = "pocket.svd"
+    #builder = Builder(soc, **builder)
+    builder.build(run=args.build, build_name="litex")
 
     root_dir = os.path.abspath("")
     generated_dir = builder.generated_dir
