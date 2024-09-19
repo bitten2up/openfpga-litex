@@ -3,7 +3,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
     <vendor>litex</vendor>
     <name>SOC</name>
-    <description><![CDATA[Litex SoC 2024-09-18 20:07:19]]></description>
+    <description><![CDATA[Litex SoC 2024-09-18 22:20:17]]></description>
 
     <addressUnitBits>8</addressUnitBits>
     <width>32</width>
@@ -591,56 +591,10 @@ register to disable individual events.]]></description>
                         </field>
                     </fields>
                 </register>
-                <register>
-                    <name>UPTIME_LATCH</name>
-                    <description><![CDATA[Write a ``1`` to latch current Uptime cycles to ``uptime_cycles`` register.]]></description>
-                    <addressOffset>0x0020</addressOffset>
-                    <resetValue>0x00</resetValue>
-                    <size>32</size>
-                    <fields>
-                        <field>
-                            <name>uptime_latch</name>
-                            <msb>0</msb>
-                            <bitRange>[0:0]</bitRange>
-                            <lsb>0</lsb>
-                        </field>
-                    </fields>
-                </register>
-                <register>
-                    <name>UPTIME_CYCLES1</name>
-                    <description><![CDATA[Bits 32-63 of `TIMER0_UPTIME_CYCLES`. Latched Uptime since power-up (in
-``sys_clk`` cycles).]]></description>
-                    <addressOffset>0x0024</addressOffset>
-                    <resetValue>0x00</resetValue>
-                    <size>32</size>
-                    <fields>
-                        <field>
-                            <name>uptime_cycles</name>
-                            <msb>31</msb>
-                            <bitRange>[31:0]</bitRange>
-                            <lsb>0</lsb>
-                        </field>
-                    </fields>
-                </register>
-                <register>
-                    <name>UPTIME_CYCLES0</name>
-                    <description><![CDATA[Bits 0-31 of `TIMER0_UPTIME_CYCLES`.]]></description>
-                    <addressOffset>0x0028</addressOffset>
-                    <resetValue>0x00</resetValue>
-                    <size>32</size>
-                    <fields>
-                        <field>
-                            <name>uptime_cycles</name>
-                            <msb>31</msb>
-                            <bitRange>[31:0]</bitRange>
-                            <lsb>0</lsb>
-                        </field>
-                    </fields>
-                </register>
             </registers>
             <addressBlock>
                 <offset>0</offset>
-                <size>0x2c</size>
+                <size>0x20</size>
                 <usage>registers</usage>
             </addressBlock>
             <interrupt>

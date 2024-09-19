@@ -270,6 +270,8 @@ def main():
         "integrated_sram_size": 0x20000, # Power of 2 so Quartus infers it properly.
         "cpu_type"          : "vexriscv_smp",
         "cpu_variant"       : "linux",
+        "with_uart"         : False,
+        "with_timer_uptime" : True,
     }
 
     VexRiscvSMP.args_read(args)
