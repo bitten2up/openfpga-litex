@@ -267,7 +267,7 @@ def main():
         "with_mister_sdram" : True, # Add MiSTer SDRAM extension.
         "l2_size"           : 2048, # Use Wishbone and L2 for memory accesses.
         "integrated_rom_size" : 0x20000,
-        "integrated_sram_size": 0x20000, # Power of 2 so Quartus infers it properly.
+        "integrated_sram_size": 0x2000, # Power of 2 so Quartus infers it properly.
         "cpu_type"          : "vexriscv_smp",
         "cpu_variant"       : "linux",
         "with_uart"         : False,

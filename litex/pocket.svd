@@ -3,7 +3,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
     <vendor>litex</vendor>
     <name>SOC</name>
-    <description><![CDATA[Litex SoC 2024-09-18 22:20:17]]></description>
+    <description><![CDATA[Litex SoC 2024-09-19 06:01:23]]></description>
 
     <addressUnitBits>8</addressUnitBits>
     <width>32</width>
@@ -2113,7 +2113,7 @@ to the Wishbone/CSR bus are working correctly. The initial reset value of
             <memoryRegion>
                 <name>SRAM</name>
                 <baseAddress>0x10000000</baseAddress>
-                <size>0x00020000</size>
+                <size>0x00002000</size>
             </memoryRegion>
             <memoryRegion>
                 <name>MAIN_RAM</name>
