@@ -97,7 +97,6 @@ class BaseSoC(SoCCore):
 
         # Allow booting from the first address in SDRAM
         #self.add_constant("ROM_COPY_ADDRESS", 0x40000000)
-        self.add_constant("ROM", 0x00000000)
         self.add_constant("ROM_BOOT_ADDRESS", 0x40000000)
         # self.add_constant("SDRAM_TEST_DISABLE", 1)
 

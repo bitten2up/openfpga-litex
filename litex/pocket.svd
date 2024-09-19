@@ -3,7 +3,7 @@
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD.xsd" >
     <vendor>litex</vendor>
     <name>SOC</name>
-    <description><![CDATA[Litex SoC 2024-09-19 06:01:23]]></description>
+    <description><![CDATA[Litex SoC 2024-09-19 13:43:02]]></description>
 
     <addressUnitBits>8</addressUnitBits>
     <width>32</width>
@@ -2160,7 +2160,6 @@ to the Wishbone/CSR bus are working correctly. The initial reset value of
             <constant name="CONFIG_BIOS_NO_BUILD_TIME" value="None" />
             <constant name="DEPLOYMENT_PLATFORM" value="openfpga" />
             <constant name="DEPLOYMENT_TARGET" value="pocket" />
-            <constant name="ROM" value="0" />
             <constant name="ROM_BOOT_ADDRESS" value="1073741824" />
             <constant name="VIDEO_FRAMEBUFFER_BASE" value="1086324736" />
             <constant name="VIDEO_FRAMEBUFFER_HRES" value="266" />
